@@ -1327,9 +1327,7 @@
                             updateDashboardStats();
 
                             showDialog("Presensi Sukses", `Absensi ${tipeVal} Anda di cabang ${selectedSchoolName} berhasil tersimpan di Google Sheet! Koordinat perangkat (${payload.lokasi}) tervalidasi.`, "success");
-                            setTimeout(() => {
-                            location.reload();
-                            }, 2000); // reload setelah 2 detik
+                            
                             resetPresensiForm();
                         } else {
                             // Menampilkan pesan kesalahan dari respons backend (seperti duplikasi absen)
