@@ -522,18 +522,7 @@
         let selectedSchoolRadius = 100;
         let selectedSchoolName = "Kampus Utama (Pusat)";
 
-        // Inisialisasi Data Dummy Awal untuk Mode Preview
-        function initializeMockData() {
-            // 1. Database Akun
-            if (localStorage.getItem("mock_users")) {
-                mockUsersDb = JSON.parse(localStorage.getItem("mock_users"));
-            } else {
-                mockUsersDb = [
-                    { username: "admin", password: "admin2026", nama: "Admin Pengawas Sekolah", nip: "197205151998031001", role: "Admin" },
-                    { username: "peserta", password: "edudigital", nama: "Agus Prasetyo, S.Pd.", nip: "198811122015041003", role: "Peserta" }
-                ];
-                localStorage.setItem("mock_users", JSON.stringify(mockUsersDb));
-            }
+
 
             // 2. Database 5 Lokasi Sekolah Default
             if (localStorage.getItem("mock_locations")) {
