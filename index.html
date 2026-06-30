@@ -1193,9 +1193,7 @@
                 submitPresensiBtn.disabled = false;
                 submitPresensiBtn.className = "w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-indigo-500/35 flex items-center justify-center gap-2 cursor-pointer";
                 submitPresensiBtn.innerHTML = `<i class="fa-solid fa-camera"></i> Ambil Foto & Kirim Presensi`;
-                setTimeout(() => {
-                location.reload();
-                }, 1000);
+               
             } else {
                 submitPresensiBtn.disabled = true;
                 submitPresensiBtn.className = "w-full bg-slate-200 text-slate-400 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-not-allowed";
