@@ -1826,6 +1826,121 @@ checkTodayAttendanceStatus();
             initializeMockData();
             requestUserLocation();
         };
+		// Fungsi Penanganan Form Ganti Password
+function handleGantiPasswordSubmit(event) {
+    event.preventDefault();
+
+    const passLama = document.getElementById('pass-lama').value;
+    const passBaru = document.getElementById('pass-baru').value;
+    const passKonfirmasi = document.getElementById('pass-konfirmasi').value;
+
+    // Validasi 1: Minimal karakter password baru
+    if (passBaru.length < 6) {
+        showToast("Password baru harus minimal 6 karakter!", "error");
+        return;
+    }
+
+    // Validasi 2: Kesesuaian password baru & konfirmasi
+    if (passBaru !== passKonfirmasi) {
+        showToast("Konfirmasi password baru tidak cocok!", "error");
+        return;
+    }
+
+    // Cek Model Pengoperasian Aplikasi (ONLINE GAS atau LOCAL PREVIEW)
+    if (IS_PREVIEW === false) {
+        // --- JIKA MODE PRODUCTION ONLINE (Kirim Perubahan Ke Google Sheets lewat GAS) ---
+        const btnSubmit = document.getElementById('btn-submit-password');
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Memproses...`;
+
+        // Menyiapkan Payload Data untuk dikirim ke Google Apps Script
+        const payload = {
+            action: "changePassword",
+            username: currentSession.username, // Mengambil user aktif dari session aplikasi Anda
+            oldPassword: passLama,
+            newPassword: passBaru
+        };
+
+        fetch(GAS_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success" || data.success) {
+                showToast("Password berhasil diperbarui di database cloud!", "success");
+                document.getElementById('form-ganti-password').reset();
+                switchTab('dashboard');
+            } else {
+                showToast(data.message || "Gagal mengganti password. Periksa kembali password lama Anda.", "error");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showToast("Terjadi kesalahan jaringan atau server GAS.", "error");
+        })
+        .finally(() => {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = `<i class="fa-solid fa-save"></i> Perbarui Password`;
+        });
+
+    } else {
+        // --- JIKA MODE PREVIEW / DEMO MODE (Ubah Lokal di mockUsersDb) ---
+        // Cari user yang sedang login di database tiruan
+        const userIndex = mockUsersDb.findIndex(u => u.username === currentSession.username);
+
+        if (userIndex !== -1) {
+            if (mockUsersDb[userIndex].password !== passLama) {
+                showToast("Password lama Anda salah!", "error");
+                return;
+            }
+
+            // Update dan simpan kembali ke local storage sandbox
+            mockUsersDb[userIndex].password = passBaru;
+            localStorage.setItem("mock_users", JSON.stringify(mockUsersDb));
+
+            showToast("Password akun (Lokal) sukses diganti!", "success");
+            document.getElementById('form-ganti-password').reset();
+            switchTab('dashboard');
+        } else {
+            showToast("Sesi pengguna tidak valid.", "error");
+        }
+    }
+}
+		function checkTodayAttendanceStatus() {
+    if (!currentSession) return;
+    
+    // Mendapatkan tanggal hari ini berformat DD/MM/YYYY seperti database mockup Anda
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    const todayStr = `${day}/${month}/${year}`;
+
+    // Cari data absen milik user login hari ini
+    const todayAttendance = mockAttendanceDb.filter(row => 
+        row.nip === currentSession.nip && row.tanggal === todayStr
+    );
+
+    // Ambil elemen tipe absen radio & tombol submit
+    const btnSubmit = document.getElementById('btn-submit-presensi');
+    
+    // Cek jenis absen yang sudah diisi
+    const hasMasuk = todayAttendance.some(row => row.tipe === "Masuk");
+    const hasPulang = todayAttendance.some(row => row.tipe === "Pulang");
+
+    // Dapatkan tipe absen yang saat ini sedang dipilih oleh user di form radio button
+    const selectedTipe = document.querySelector('input[name="tipe_absen"]:checked')?.value;
+
+    if ((selectedTipe === "Masuk" && hasMasuk) || (selectedTipe === "Pulang" && hasPulang)) {
+        btnSubmit.disabled = true;
+        btnSubmit.className = "w-full bg-rose-100 text-rose-500 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-not-allowed";
+        btnSubmit.innerHTML = `<i class="fa-solid fa-circle-check"></i> Anda Sudah Absen ${selectedTipe} Hari Ini`;
+        return true; // Status sudah absen
+    }
+    return false; // Belum absen untuk tipe terpilih
+}
+
     </script>
 </body>
 </html>
