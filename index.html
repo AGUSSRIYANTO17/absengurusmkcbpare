@@ -152,6 +152,7 @@
                 <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 bg-white text-indigo-600 shadow-sm">
                     <i class="fa-solid fa-chart-line"></i> Dashboard
                 </button>
+				
                 <button onclick="switchTab('presensi')" id="btn-tab-presensi" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
                     <i class="fa-solid fa-camera"></i> Presensi Face Mesh
                 </button>
@@ -164,9 +165,9 @@
                 <button onclick="switchTab('admin-menu')" id="btn-tab-admin-menu" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900 bg-purple-50 text-purple-700 hover:bg-purple-100 hidden">
                     <i class="fa-solid fa-user-gear"></i> Keterangan
                 </button>
-                <button onclick="switchTab('panduan')" id="btn-tab-panduan" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900 bg-amber-50 text-amber-700 hover:bg-amber-100 hidden">
-                    <i class="fa-solid fa-code"></i> setup
-                </button>
+                <button onclick="switchTab('ganti-password')" id="btn-tab-ganti-password" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 text-slate-600 hover:text-slate-900">
+    				<i class="fa-solid fa-key"></i> Ganti Password
+				</button>
             </nav>
 
             <!-- ==================== TAB 1: DASHBOARD ==================== -->
@@ -472,7 +473,43 @@
                 </div>
             </section>
 
-            
+  <section id="tab-ganti-password" class="tab-content hidden max-w-md mx-auto w-full">
+    <form id="form-ganti-password" onsubmit="handleGantiPasswordSubmit(event)" class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-5">
+        <div>
+            <h3 class="text-xl font-bold text-slate-900">Ganti Password Akun</h3>
+            <p class="text-xs text-slate-500 mt-1">Gunakan password yang kuat demi keamanan data presensi Anda</p>
+        </div>
+        <hr class="border-slate-100">
+
+        <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-slate-500">Password Saat Ini</label>
+            <div class="relative">
+                <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-400"></i>
+                <input type="password" id="pass-lama" required placeholder="Masukkan password sekarang" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 font-medium">
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-slate-500">Password Baru</label>
+            <div class="relative">
+                <i class="fa-solid fa-key absolute left-4 top-3.5 text-slate-400"></i>
+                <input type="password" id="pass-baru" required placeholder="Minimal 6 karakter" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 font-medium">
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+            <label class="text-xs font-bold text-slate-500">Konfirmasi Password Baru</label>
+            <div class="relative">
+                <i class="fa-solid fa-circle-check absolute left-4 top-3.5 text-slate-400"></i>
+                <input type="password" id="pass-konfirmasi" required placeholder="Ulangi password baru" class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 font-medium">
+            </div>
+        </div>
+
+        <button type="submit" id="btn-submit-password" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-indigo-100 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-save"></i> Perbarui Password
+        </button>
+    </form>
+</section>          
 
                    
 
@@ -484,7 +521,7 @@
         //  SAKLAR DEPLOYMENT & KONFIGURASI UTAMA
         // ==========================================
         const IS_PREVIEW = false; 
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbwaXHbWD9BdJ1RJXZDUg6RE0Q0Wv8BSY_3iCRdwK6tKbKyn841BghuinE3BENIxdho/exec";
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzjfQb1x91Hln8dUijITAxR7fOQWU3kQC0r8u_sudECref_Ax9-U2O1i7GOxEX5jJI/exec";
 
         // State Global Aplikasi
         let currentSession = null; 
